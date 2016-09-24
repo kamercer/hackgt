@@ -1,6 +1,7 @@
 var geolib = require("geolib");
 var mongoose = require("mongoose");
 var fs = require('fs');
+var get = require('get');
 
 var MongoClient = require('mongodb').MongoClient;
 
@@ -17,19 +18,66 @@ module.exports = function(app){
 
 
     app.get('/results', function(req, res){
-        var lat = req.query.lat;
-        var log = req.query.log;
-        var hours = req.query.hours;
+        if(req.query.lat){
+            var lat = req.query.lat;
+            var log = req.query.log;
+            var hours = req.query.hours;
 
-        Glat = lat;
-        Glog = log;
+            Glat = lat;
+            Glog = log;
 
-        console.log(lat);
-        console.log(log);
-        console.log(hours);
+            doStuff(req, res, hours, false);
+        }else{
+            //manually set location of hartsfield-jackson airport
+            Glat = 33.640728;
+            Glog = -84.427700;
 
-        MongoClient.connect('mongodb://localhost/erasmus', function(err, db) {
+            var arrivingFlightNumber = req.query.arrivingFlightNumber;
+            var arrivingFlightTime = new Date(req.query.arrivingFlightTime);
+            var departingFlightNumber = req.query.departingFlightNumber;
+            var departingFlightTime = new Date(req.query.departingFlightTime);
+
+            
+
+            get('https://demo30-test.apigee.net/v1/hack/status?flightNumber=' + arrivingFlightNumber + '&flightOriginDate=' + arrivingFlightTime.toISOString().substr(0, 10) + '&apikey=bV3G0zA7ZjYGIlRtezCJC7oAALQfLnhK')
+            .asString(function(err1, data1){
+
+
+                console.log(err1);
+                console.log(data1);
+
+                get('https://demo30-test.apigee.net/v1/hack/status?flightNumber=' + departingFlightNumber + '&flightOriginDate=' + departingFlightTime.toISOString().substr(0, 10) + '&apikey=bV3G0zA7ZjYGIlRtezCJC7oAALQfLnhK')
+                .asString(function(err2, data2){
+                    console.log(err2);
+                    console.log(data2);
+
+                    //This will be in milliseconds
+                    var hours = data1.arrivalLocalTimeEstimatedActual - data2.arrivalLocalTimeEstimatedActual;
+                    hour = hours / 1000; //now seconds
+                    hour = hours / 60; //now minutes
+                    hour = hours / 60; //now hours
+
+
+                    doStuff(req, res, hours, true);
+                });
+            });
+        }
+    });
+};
+
+function doStuff(req, res, hours, isDelta){
+            MongoClient.connect('mongodb://localhost/erasmus', function(err, db) {
             console.log(err);
+
+            var limit;
+            var mode;
+            if(isDelta){
+                limit = hours * 9000;
+                mode="driving";
+            }else{
+                limit = hours * 4500;
+                mode="walking";
+            }
             
             var potentialMarkers = [];
             
@@ -41,9 +89,10 @@ module.exports = function(app){
                 db.close(); 
                 
                 docs.forEach(function(doc, index){
-                    var distance = geolib.getDistance({latitude : lat, longitude : log}, {latitude : doc.LATITUDE, longitude : doc.LONGITUDE});
+                    var distance = geolib.getDistance({latitude : Glat, longitude : Glog}, {latitude : doc.LATITUDE, longitude : doc.LONGITUDE});
 
-                    if((distance) <= (hours * 5000)){
+                    
+                    if((distance) <= (limit)){
                         potentialMarkers.push(doc);
                     }
                 }); 
@@ -55,21 +104,23 @@ module.exports = function(app){
                 //get random values
                 var randomArray = [];
 
-                for(var i = 0; i < 50; i++){
+                for(var i = 0; i < 55; i++){
                     var num = Math.floor(Math.random() * potentialMarkers.length);
                     randomArray.push(potentialMarkers[num]);
                     potentialMarkers.splice(num, 1);
                 }
                     
                 var start = (new Date).getTime();
-                var current = getGood(randomArray, [], [], (hours * 5000));
+                var current = getGood(randomArray, [], [], (limit));
                 var end = (new Date).getTime();
 
                 console.log("seconds: " + (end-start)/1000);
 
                 console.log('/////////////////////////////////////////////////');
                 
-                var srcString = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyApi4m2QEuUCKIiMtuUrmqicZwRrhza6gg&origin=" + Glat + "," + Glog + "&destination=" + current[current.length-1].LATITUDE + "," + current[current.length-1].LONGITUDE + "&mode=walking&waypoints=";
+                
+
+                var srcString = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyApi4m2QEuUCKIiMtuUrmqicZwRrhza6gg&origin=" + Glat + "," + Glog + "&destination=" + current[current.length-1].LATITUDE + "," + current[current.length-1].LONGITUDE + "&mode=" + mode + "&waypoints=";
                 
                 for(var i = 0; i < current.length-1; i++){
                     //console.log(current[i].LATITUDE + ", " + current[i].LONGITUDE);
@@ -92,8 +143,7 @@ module.exports = function(app){
                 //res.end();
             });
         });
-    });
-};
+}
 
 var Glat;
 var Glog;
