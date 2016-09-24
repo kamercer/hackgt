@@ -1,29 +1,26 @@
 <!doctype html>
-<html lang="en" ng-app>
+<html lang="en" ng-app="tripApp">
   <head>
     <meta charset="utf-8">
-    <title>Trip Planner (tentative)</title>
+    <title>Trip Advisor</title>
     <!--<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />-->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="bower_components/angular-bootstrap/ui-bootstrap-csp.css"></link>
+    <link rel="stylesheet" type="text/css" href="stylesheets/index.css"/>
+
     <script src="bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+    <!--<script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>-->
+    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+
+    <script src="app.js"></script>
+
+    <script src="components/userInput/input_directive.js"></script>
+    <script src="components/userInput/input_controller.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
-        <!--<ul>
-          <li>
-            <span>Nexus S</span>
-            <p>
-              Fast just got faster with Nexus S.
-            </p>
-          </li>
-          <li>
-            <span>Motorola XOOM™ with Wi-Fi</span>
-            <p>
-              The Next, Next Generation tablet.
-            </p>
-          </li>
-        </ul>-->
         <div class="container">
           <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -32,7 +29,7 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Trip Planner</a>
+            <a class="navbar-brand" href="#">Trip Advisor</a>
           </div>
           <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
@@ -45,5 +42,12 @@
           <!--<div id="fb-root"></div>-->
       </div>
     </nav>
+    <div id='controlPanel'>
+      <input-directive></input-directive>
+    </div>
+    <!-- where to display the map -->
+    <div id='displayPanel'> 
+      
+    </div>
   </body>
 </html>
