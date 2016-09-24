@@ -4,6 +4,7 @@ var express = require('express');
 var app = express();
 
 
+/*
 mongoose.connect('mongodb://localhost/erasmus');
 
 var db = mongoose.connection;
@@ -14,6 +15,7 @@ db.on('open', function(){
 db.on('error', function(){
     console.log('database not connected');
 });
+*/
 
 //global.db = db;
 

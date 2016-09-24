@@ -6,7 +6,8 @@
   "dependencies":{
     "express" : "latest",
     "mongoose" : "latest",
-    "geolib" : "latest"
+    "geolib" : "latest",
+    "bower" : "latest"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
