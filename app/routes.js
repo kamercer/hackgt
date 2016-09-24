@@ -125,7 +125,7 @@ function doStuff(req, res, hours, isDelta){
 
                 console.log(srcString);
 
-                fs.readFile('/home/kyle/hackgt/public/directions.html', 'utf8', function(err, data){
+                fs.readFile('~/hackgt/public/directions.html', 'utf8', function(err, data){
                     data = data.replace("%%%", srcString);
                     res.send(data);
                 });
