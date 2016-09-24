@@ -5,6 +5,7 @@ angular.module('tripApp',
     'ui.bootstrap',
     'tripApp.controllers',
     'tripApp.directives',
+    'google.places',
     // '.services'
     ])
 
