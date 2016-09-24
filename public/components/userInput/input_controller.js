@@ -14,6 +14,11 @@ angular.module('tripApp.controllers')
                 return arguments.length ? (_duration = newDuration) : _duration;
             }
         };
+
+        // $scope.isActive = function (viewLocation) { 
+        //     return viewLocation === $location.path();
+        // };
+
         $scope.send = function(){
             // var curloc = $scope.user.curLoc();
             var curloc = $scope.curLoc;

@@ -1,0 +1,17 @@
+<div ng-controller="deltaController">
+    <form action=>
+        
+<div class="logo">Escapade</div>
+<div class="login-block">
+    <h1>Discover your next Adventure with Delta!</h1>
+    <input type="number" name="aflightNum" ng-model="aflightNum"  placeholder="Arriving Flight Number" ><br>
+    <input type="text" name="aflightTime" ng-model="aflightTime" placeholder="Arriving Flight Time" ><br>
+    <input type="number" name="dflightNum" ng-model="dflightNum"  placeholder="Departing Flight Number" ><br>
+    <input type="text" name="dflightTime" ng-model="dflightTime" placeholder="Departing Flight Time" ><br>
+    <button type="button" ng-click="send()" class="btn btn-default btnbtn-block btn-success" >Generate Routes!</button>
+    </form>
+    <br>
+    <!--<pre>{{curLoc | json}}</pre>-->
+    <!--<pre>Your Current Selected Location = <span ng-bind="user.curLoc()"></span></pre>
+    <pre>Your Current Planned Travel Time = <span ng-bind="user.duration()"></span></pre>-->
+</div>

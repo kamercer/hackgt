@@ -12,9 +12,6 @@ module.exports = function(app){
         res.sendFile('/views/index.html', {root: __dirname + '/../public'});
     });
 
-
-
-
     app.get('/results', function(req, res){
         if(req.query.lat){
             var lat = req.query.lat;

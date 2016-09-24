@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8">
     <title>Trip Advisor</title>
-    <!--<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />-->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="bower_components/angular-bootstrap/ui-bootstrap-csp.css"></link>
     <link rel="stylesheet" type="text/css" href="stylesheets/index.css"/>
 
     <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
     <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
     <!--<script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>-->
     <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
@@ -23,8 +23,11 @@
 
     <script src="components/userInput/input_directive.js"></script>
     <script src="components/userInput/input_controller.js"></script>
+    <script src="components/deltaInput/delta_directive.js"></script>
+    <script src="components/deltaInput/delta_controller.js"></script>
+    <script src="/views/nav_controller.js"></script>
   </head>
-  <body>
+  <body ng-controller="NavCtrl">
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
           <div class="navbar-header">
@@ -36,20 +39,14 @@
             </button>
             <a class="navbar-brand" href="#">Escapade</a>
           </div>
-          <div id="navbar" class="collapse navbar-collapse">
+          <div id="navbar" class="collapse navbar-collapse" >
             <ul class="nav navbar-nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li class=""><a href="#">Delta</a></li>
+              <li ng-class="navClass('home')"><a href='' ng-click="loadHome()">Home</a></li>
+              <li ng-class="navClass('delta')"><a href='' ng-click="loadAbout()">Delta</a></li>
             </ul>
           </div>
       </div>
     </nav>
-    <div id='controlPanel'>
-      <input-directive></input-directive>
-    </div>
-    <!-- where to display the map -->
-    <div id='displayPanel'> 
-      
-    </div>
+    <div ng-view> </div>
   </body>
 </html>
