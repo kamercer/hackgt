@@ -57,6 +57,7 @@ module.exports = function(app){
                 }
 
                 console.log(addUp(current)/1000);
+                res.end();
             });
         });
     });
