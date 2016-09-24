@@ -28,11 +28,14 @@ angular.module('tripApp.controllers')
                     lat      = location.lat(),
                     lng      = location.lng();
                 console.log("Latitude: " + lat+ "\nLongitude: " + lng);
-                $http.get('/results?lat='+lat+'&log='+lng+'&hours='+durat).success(function(res) {  
+                window.location.href = '/results?lat='+lat+'&log='+lng+'&hours='+durat;
+
+                /*$http.get('/results?lat='+lat+'&log='+lng+'&hours='+durat).success(function(res) {  
                     if(res) {
                         console.log(res);
                     } 
                 });
+                */
             } else alert("All fields should be filled to continue!");
 
             // var geocoder = new google.maps.Geocoder();

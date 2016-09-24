@@ -1,5 +1,6 @@
 var geolib = require("geolib");
 var mongoose = require("mongoose");
+var fs = require('fs');
 
 var MongoClient = require('mongodb').MongoClient;
 
@@ -11,6 +12,8 @@ module.exports = function(app){
     app.get('/', function(req, res){
         res.sendFile('/views/index.html', {root: __dirname + '/../public'});
     });
+
+
 
 
     app.get('/results', function(req, res){
@@ -52,7 +55,7 @@ module.exports = function(app){
                 //get random values
                 var randomArray = [];
 
-                for(var i = 0; i < 25; i++){
+                for(var i = 0; i < 50; i++){
                     var num = Math.floor(Math.random() * potentialMarkers.length);
                     randomArray.push(potentialMarkers[num]);
                     potentialMarkers.splice(num, 1);
@@ -66,12 +69,27 @@ module.exports = function(app){
 
                 console.log('/////////////////////////////////////////////////');
                 
-                for(var i = 0; i < current.length; i++){
-                    console.log(current[i].LATITUDE + ", " + current[i].LONGITUDE);
+                var srcString = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyApi4m2QEuUCKIiMtuUrmqicZwRrhza6gg&origin=" + Glat + "," + Glog + "&destination=" + current[current.length-1].LATITUDE + "," + current[current.length-1].LONGITUDE + "&mode=walking&waypoints=";
+                
+                for(var i = 0; i < current.length-1; i++){
+                    //console.log(current[i].LATITUDE + ", " + current[i].LONGITUDE);
+                    srcString = srcString + current[i].LATITUDE + "," + current[i].LONGITUDE;
+
+                    if(i < current.length-2){
+                        srcString += "|";
+                    }
                 }
 
+                console.log(srcString);
+
+                fs.readFile('/home/kyle/hackgt/public/directions.html', 'utf8', function(err, data){
+                    console.log(err);
+                    data = data.replace("%%%", srcString);
+                    res.send(data);
+                });
+
                 console.log(addUp(current)/1000);
-                res.end();
+                //res.end();
             });
         });
     });
@@ -85,7 +103,6 @@ function getGood(potentialMarkers, current, working, limit){
     var distanceToHome;
     if(working.length > 0){
         var currentLocation = working[working.length-1];
-        console.log(currentLocation);
         distanceToHome = geolib.getDistance({latitude : Glat, longitude : Glog}, {latitude : currentLocation.LATITUDE, longitude : currentLocation.LONGITUDE});
         //console.log(Glat);
         //distanceToHome = distanceToHome/1000;
@@ -137,7 +154,7 @@ function getGood(potentialMarkers, current, working, limit){
     
 }
 
-//returns kilometers
+//returns meters
 function addUp(current){
     var distance = 0;
 
