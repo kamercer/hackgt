@@ -34,7 +34,6 @@ angular.module('tripApp.controllers')
                     lng      = location.lng();
                 console.log("Latitude: " + lat+ "\nLongitude: " + lng);
                 window.location.href = '/results?lat='+lat+'&log='+lng+'&hours='+durat;
-
                 /*$http.get('/results?lat='+lat+'&log='+lng+'&hours='+durat).success(function(res) {  
                     if(res) {
                         console.log(res);
@@ -63,4 +62,8 @@ angular.module('tripApp.controllers')
 
 
         };
+
+        // $scope.loadDirs = function () {
+        //     $location.url('/directions');
+        // };
 }]);

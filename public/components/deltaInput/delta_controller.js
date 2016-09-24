@@ -9,9 +9,8 @@ angular.module('tripApp.controllers')
         $scope.dflightTime = null;
 
         $scope.send = function(){
-            if($scope.aflightNum==null || $scope.dflightNum==null
-                || $scope.aflightTime==null || $scope.dflightTime==null) alert("All fields should be filled to continue!");
-
+            // if($scope.aflightNum==null || $scope.dflightNum==null
+            //     || $scope.aflightTime==null || $scope.dflightTime==null) alert("All fields should be filled to continue!");
             if($scope.aflightNum && $scope.dflightNum && $scope.aflightTime && $scope.dflightTime) {
                 console.log($scope.aflightNum,$scope.dflightNum, $scope.aflightTime, $scope.dflightTime);
                 window.location.href = '/results?arrivingFlightNumber='+$scope.aflightNum+'&arrivingFlightTime='+$scope.aflightTime

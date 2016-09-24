@@ -22,6 +22,10 @@ angular.module('tripApp',
                 // templateUrl:    '/views/delta.html',
                 template: '<delta-directive></delta-directive>'
             });
+            // $routeProvider.when('/directions',
+            // {
+            //     templateUrl:    'directions.html',
+            // });
             $routeProvider.otherwise(
             {
                 redirectTo:     '/home',

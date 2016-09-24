@@ -1,8 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="tripApp">
   <head>
     <meta charset="UTF-8">
     <title>Escapade</title>
+
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="bower_components/angular-bootstrap/ui-bootstrap-csp.css"></link>
+
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    
+    <script src="app.js"></script>
+
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAwbn9VJZH732tkZ6_qajT6UGTxw93pyJc&libraries=places"></script>
+    <script src="bower_components/angular-google-places-autocomplete/src/autocomplete.js"></script>
+    <link rel="stylesheet" href="/bower_components/angular-google-places-autocomplete/src/autocomplete.css">
+
+    <script src="components/userInput/input_directive.js"></script>
+    <script src="components/userInput/input_controller.js"></script>
+    <script src="components/deltaInput/delta_directive.js"></script>
+    <script src="components/deltaInput/delta_controller.js"></script>
+    <script src="/views/nav_controller.js"></script>
+    <script src="directives.js"></script>
   </head>
 
   <style>
@@ -14,10 +36,24 @@
         display: block;
         width: 100%;
         height: 100%;
+        margin-top: 50px;
     }
 </style>
 
-  <body>
+  <body ng-controller="NavCtrl">
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="" back >Escapade</a>
+            </div>
+        </div>
+      </nav>
       <iframe
         frameborder="0" style="border:0"
         src="%%%" allowfullscreen>
