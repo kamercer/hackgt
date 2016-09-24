@@ -32,26 +32,29 @@ module.exports = function(app){
             var departingFlightNumber = req.query.departingFlightNumber;
             var departingFlightTime = new Date(req.query.departingFlightTime);
 
-            
-
             get('https://demo30-test.apigee.net/v1/hack/status?flightNumber=' + arrivingFlightNumber + '&flightOriginDate=' + arrivingFlightTime.toISOString().substr(0, 10) + '&apikey=bV3G0zA7ZjYGIlRtezCJC7oAALQfLnhK')
             .asString(function(err1, data1){
 
-
-                console.log(err1);
-                console.log(data1);
+                data1 = JSON.parse(data1);
 
                 get('https://demo30-test.apigee.net/v1/hack/status?flightNumber=' + departingFlightNumber + '&flightOriginDate=' + departingFlightTime.toISOString().substr(0, 10) + '&apikey=bV3G0zA7ZjYGIlRtezCJC7oAALQfLnhK')
                 .asString(function(err2, data2){
-                    console.log(err2);
-                    console.log(data2);
+
+                    data2 = JSON.parse(data2);
 
                     //This will be in milliseconds
-                    var hours = data1.arrivalLocalTimeEstimatedActual - data2.arrivalLocalTimeEstimatedActual;
-                    hour = hours / 1000; //now seconds
-                    hour = hours / 60; //now minutes
-                    hour = hours / 60; //now hours
+                    
+                    var begin = new Date(data1.flightStatusResponse.statusResponse.flightStatusTO.flightStatusLegTOList.arrivalLocalTimeEstimatedActual);
+                    begin = begin.getTime();
 
+                    var end = new Date(data2.flightStatusResponse.statusResponse.flightStatusTO.flightStatusLegTOList[0].departureLocalTimeScheduled);
+                    end = end.getTime();
+
+
+                    var hours = end-begin;
+                    hours = hours / 1000; //now seconds
+                    hours = hours / 60; //now minutes
+                    hours = hours / 60; //now hours
 
                     doStuff(req, res, hours, true);
                 });
