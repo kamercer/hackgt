@@ -14,29 +14,39 @@ module.exports = function(app){
 
 
     app.get('/results', function(req, res){
-        console.log('this ran');
+        console.log('what');
         //var lat = req.body.lat;
         //var log = req.body.log;
         //var hours = req.body.hours;
 
-        MongoClient.connect('mongodb://localhost/S1', function(err, db) {
+        MongoClient.connect('mongodb://localhost/erasmus', function(err, db) {
             console.log(err);
             
-            var cursor = db.collection('historicalMarker').find();
-                cursor.each(function(err, docs) {
-                
-                console.log(err);
-                console.log(docs);
+            var potentialMarkers = [];
+            
+            var cursor = db.collection('historicalMarkers').find();
+            
 
-                db.collection('historicalMarker').save({"name" : "no"});
-                if (docs !== null) {
-                    
-                } else {
-                    
-                }
+            cursor.toArray().then(function(docs){
+                //console.log(docs.length);
+                db.close(); 
+                
+                docs.forEach(function(doc, index){
+                    var distance = geolib.getDistance({latitude : 33.778463, longitude : -84.398881}, {latitude : doc.LATITUDE, longitude : doc.LONGITUDE});
+
+                    if((distance/1000) <= (2 * 5)){
+                        potentialMarkers.push(doc);
+                    }
+
+                    //I now have a set of potential markers
+                    console.log(potentialMarkers.length);
+
+                   var current = [];
+                   var working = [];
+
+                   
+                }); 
             });
         });
     });
-
-    
 };
