@@ -85,7 +85,6 @@ function doStuff(req, res, hours, isDelta){
             
 
             cursor.toArray().then(function(docs){
-                console.log(docs.length);
                 db.close(); 
                 
                 docs.forEach(function(doc, index){
@@ -98,10 +97,7 @@ function doStuff(req, res, hours, isDelta){
                 }); 
 
                 //I now have a set of potential markers
-                console.log(potentialMarkers.length);
-                //console.log(potentialMarkers.splice(0, 4));
 
-                //get random values
                 var randomArray = [];
 
                 for(var i = 0; i < 55; i++){
@@ -118,8 +114,6 @@ function doStuff(req, res, hours, isDelta){
 
                 console.log('/////////////////////////////////////////////////');
                 
-                
-
                 var srcString = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyApi4m2QEuUCKIiMtuUrmqicZwRrhza6gg&origin=" + Glat + "," + Glog + "&destination=" + current[current.length-1].LATITUDE + "," + current[current.length-1].LONGITUDE + "&mode=" + mode + "&waypoints=";
                 
                 for(var i = 0; i < current.length-1; i++){
@@ -134,13 +128,9 @@ function doStuff(req, res, hours, isDelta){
                 console.log(srcString);
 
                 fs.readFile('/home/kyle/hackgt/public/directions.html', 'utf8', function(err, data){
-                    console.log(err);
                     data = data.replace("%%%", srcString);
                     res.send(data);
                 });
-
-                console.log(addUp(current)/1000);
-                //res.end();
             });
         });
 }
@@ -154,9 +144,6 @@ function getGood(potentialMarkers, current, working, limit){
     if(working.length > 0){
         var currentLocation = working[working.length-1];
         distanceToHome = geolib.getDistance({latitude : Glat, longitude : Glog}, {latitude : currentLocation.LATITUDE, longitude : currentLocation.LONGITUDE});
-        //console.log(Glat);
-        //distanceToHome = distanceToHome/1000;
-        //console.log(distanceToHome);
     }else{
         distanceToHome = 0;
     }
@@ -164,12 +151,9 @@ function getGood(potentialMarkers, current, working, limit){
     for(var i = 0; i < potentialMarkers.length; i++){
         
         working.push(potentialMarkers[i]);
-
         var temp = null;
 
-        //true - if the current route + new location is greater than specified time
-        //console.log(addUp(working));
-        //console.log(distanceToHome);
+        //true - if the current route + new location is greater than specified time or there are no more potentialMarkers
         if(addUp(working)+distanceToHome > limit || potentialMarkers.length === 0){
             //console.log('hit : ' + addUp(working) + " | " + (addUp(current)));
             if(working.length > current.length){
@@ -182,16 +166,9 @@ function getGood(potentialMarkers, current, working, limit){
             temp = getGood(potentialMarkers.slice(i+1), current.slice(0), working.slice(0), limit);
             //console.log('old method: ' + potentialMarkers.length + " | " + temp.length + " | " + i);
         }
-            
-            
-        
-            
-        
-        //console.log(temp);
+
         working.pop();
-            
-        //console.log(geolib.getDistance({latitude : 33.778463, longitude : -84.398881}, {latitude : temp[0].LATITUDE, longitude : temp[0].LONGITUDE}));
-           
+
         if(addUp(temp) <= limit && temp.length > current.length){
             current = temp;
         }
