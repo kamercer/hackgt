@@ -5,7 +5,8 @@
   "main": "server.js",
   "dependencies":{
     "express" : "latest",
-    "mongoose" : "latest"
+    "mongoose" : "latest",
+    "geolib" : "latest"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
