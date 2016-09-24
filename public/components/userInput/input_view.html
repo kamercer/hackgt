@@ -1,11 +1,12 @@
 <div ng-controller="inputController">
     <form action=>
-        Current Location:<br>
-        <input type="text" name="curLoc" ng-model="curLoc" ng-model-options="{ getterSetter: true }" g-places-autocomplete><br>
-        Travel Duration (in hours):<br>
-        <input type="number" name="duration" ng-model="user.duration" ng-model-options="{ getterSetter: true }"><br>
-        <br>
-        <button type="button" ng-click="send()" class="btn btn-default btnbtn-block btn-success" >Generate Routes!</button>
+        
+<div class="logo">Escapade</div>
+<div class="login-block">
+    <h1>Discover your next Adventure!</h1>
+    <input type="text" name="curLoc" ng-model="curLoc" ng-model-options="{ getterSetter: true }" placeholder="Address" g-places-autocomplete><br>
+    <input type="number" name="duration" ng-model="user.duration" placeholder="Hours" ng-model-options="{ getterSetter: true }"><br>
+    <button type="button" ng-click="send()" class="btn btn-default btnbtn-block btn-success" >Generate Routes!</button>
     </form>
     <br>
     <!--<pre>{{curLoc | json}}</pre>-->

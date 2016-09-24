@@ -1,11 +1,9 @@
 var geolib = require("geolib");
-var mongoose = require("mongoose");
 var fs = require('fs');
 var get = require('get');
 
 var MongoClient = require('mongodb').MongoClient;
 
-var hist = mongoose.model('historicalMarker',new mongoose.Schema({}, {strict : false}));
 
 module.exports = function(app){
     
@@ -178,7 +176,6 @@ function getGood(potentialMarkers, current, working, limit){
     }
 
     return current;
-    
 }
 
 //returns meters
