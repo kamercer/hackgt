@@ -1,10 +1,13 @@
 <div ng-controller="inputController">
     <form action=>
         Current Location:<br>
-        <input type="text" name="curLoc"><br>
-        Travel Duration:<br>
-        <input type="text" name="duration"><br>
+        <input type="text" name="curLoc" ng-model="user.curLoc" ng-model-options="{ getterSetter: true }"><br>
+        Travel Duration (in hours):<br>
+        <input type="number" name="duration" ng-model="user.duration" ng-model-options="{ getterSetter: true }"><br>
         <br>
-        <button type="button" ng-click="" class="btn btn-default btnbtn-block btn-warning" >Generate Routes!</button>
+        <button type="button" ng-click="send()" class="btn btn-default btnbtn-block btn-success" >Generate Routes!</button>
     </form>
+    <br>
+    <pre>Your Current Selected Location = <span ng-bind="user.curLoc()"></span></pre>
+    <pre>Your Current Planned Travel Time = <span ng-bind="user.duration()"></span></pre>
 </div>
