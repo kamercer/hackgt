@@ -18,6 +18,13 @@ module.exports = function(app){
         var log = req.query.log;
         var hours = req.query.hours;
 
+        Glat = lat;
+        Glog = log;
+
+        console.log(lat);
+        console.log(log);
+        console.log(hours);
+
         MongoClient.connect('mongodb://localhost/erasmus', function(err, db) {
             console.log(err);
             
@@ -31,9 +38,9 @@ module.exports = function(app){
                 db.close(); 
                 
                 docs.forEach(function(doc, index){
-                    var distance = geolib.getDistance({latitude : 33.778463, longitude : -84.398881}, {latitude : doc.LATITUDE, longitude : doc.LONGITUDE});
+                    var distance = geolib.getDistance({latitude : lat, longitude : log}, {latitude : doc.LATITUDE, longitude : doc.LONGITUDE});
 
-                    if((distance) <= (2 * 5000)){
+                    if((distance) <= (hours * 5000)){
                         potentialMarkers.push(doc);
                     }
                 }); 
@@ -42,18 +49,25 @@ module.exports = function(app){
                 console.log(potentialMarkers.length);
                 //console.log(potentialMarkers.splice(0, 4));
 
+                //get random values
+                var randomArray = [];
+
+                for(var i = 0; i < 25; i++){
+                    var num = Math.floor(Math.random() * potentialMarkers.length);
+                    randomArray.push(potentialMarkers[num]);
+                    potentialMarkers.splice(num, 1);
+                }
                     
                 var start = (new Date).getTime();
-                var current = getGood(potentialMarkers.splice(0, 50), [], [], (2 * 5000));
+                var current = getGood(randomArray, [], [], (hours * 5000));
                 var end = (new Date).getTime();
 
-                console.log("seconds: " + (end-start)/1000); 
+                console.log("seconds: " + (end-start)/1000);
 
-                
                 console.log('/////////////////////////////////////////////////');
                 
                 for(var i = 0; i < current.length; i++){
-                    console.log(current[i].LATITUDE + ", " + current[i].LONGITUDE)
+                    console.log(current[i].LATITUDE + ", " + current[i].LONGITUDE);
                 }
 
                 console.log(addUp(current)/1000);
@@ -63,13 +77,17 @@ module.exports = function(app){
     });
 };
 
+var Glat;
+var Glog;
 function getGood(potentialMarkers, current, working, limit){
     
     //check if I need to return home
     var distanceToHome;
     if(working.length > 0){
         var currentLocation = working[working.length-1];
-        distanceToHome = geolib.getDistance({latitude : 33.778463, longitude : -84.398881}, {latitude : currentLocation.LATITUDE, longitude : currentLocation.LONGITUDE});
+        console.log(currentLocation);
+        distanceToHome = geolib.getDistance({latitude : Glat, longitude : Glog}, {latitude : currentLocation.LATITUDE, longitude : currentLocation.LONGITUDE});
+        //console.log(Glat);
         //distanceToHome = distanceToHome/1000;
         //console.log(distanceToHome);
     }else{
@@ -83,27 +101,31 @@ function getGood(potentialMarkers, current, working, limit){
         var temp = null;
 
         //true - if the current route + new location is greater than specified time
+        //console.log(addUp(working));
+        //console.log(distanceToHome);
         if(addUp(working)+distanceToHome > limit || potentialMarkers.length === 0){
-            //console.log('hit : ' + addUp(working) + " | " + (addUp(working)+distanceToHome));
-            if(addUp(working) > addUp(current)){
+            //console.log('hit : ' + addUp(working) + " | " + (addUp(current)));
+            if(working.length > current.length){
                 temp = working;
             }else{        
                 temp = current;
             }
         }else{
+            //console.log('calling new method: ' + potentialMarkers.length + " | " + current.length + " | " + working.length + " | " + i);
             temp = getGood(potentialMarkers.slice(i+1), current.slice(0), working.slice(0), limit);
+            //console.log('old method: ' + potentialMarkers.length + " | " + temp.length + " | " + i);
         }
             
             
-        //console.log('calling new method: ' + potentialMarkers.length + " | " + working.length + " | " + i);
+        
             
-        //console.log('old method: ' + potentialMarkers.length + " | " + temp.length);
+        
         //console.log(temp);
         working.pop();
             
         //console.log(geolib.getDistance({latitude : 33.778463, longitude : -84.398881}, {latitude : temp[0].LATITUDE, longitude : temp[0].LONGITUDE}));
            
-        if(addUp(temp) > addUp(current) && addUp(temp) <= limit && temp.length > current.length){
+        if(addUp(temp) <= limit && temp.length > current.length){
             current = temp;
         }
         //console.log('end: ' + current.length + " | " + addUp(current));
@@ -120,7 +142,7 @@ function addUp(current){
     var distance = 0;
 
     if(current.length > 0){
-        distance = distance + geolib.getDistance({latitude : 33.778463, longitude : -84.398881}, {latitude : current[0].LATITUDE, longitude : current[0].LONGITUDE});
+        distance = distance + geolib.getDistance({latitude : Glat, longitude : Glog}, {latitude : current[0].LATITUDE, longitude : current[0].LONGITUDE});
     }
 
     for(var i = 1; i < current.length; i++){
