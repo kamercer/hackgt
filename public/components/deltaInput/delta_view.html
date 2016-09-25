@@ -7,7 +7,21 @@
     <input type="number" name="aflightNum" ng-model="aflightNum"  placeholder="Arriving Flight Number" ><br>
     <input type="text" name="aflightTime" ng-model="aflightTime" placeholder="Arriving mm/dd/yyyy" ><br>
     <input type="number" name="dflightNum" ng-model="dflightNum"  placeholder="Departing Flight Number" ><br>
+    <!--<span> Arriving date </span> <br>
+    <p class="input-group">
+          <input type="text" class="form-control" uib-datepicker-popup="MM.dd.yyyy" ng-model="aflightNum" is-open="popup1.opened" datepicker-options="dateOptions1" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+    </p>-->
     <input type="text" name="dflightTime" ng-model="dflightTime" placeholder="Departing mm/dd/yyyy" ><br>
+    <!--<span> Departing date </span> <br>
+    <p class="input-group">
+          <input type="text" class="form-control" uib-datepicker-popup="MM.dd.yyyy" ng-model="dflightNum" is-open="popup2.opened" datepicker-options="dateOptions2" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+    </p>-->
     <button type="button" ng-click="send()" class="btn btn-default btnbtn-block btn-success" >Generate Routes!</button>
     </form>
     <br>
