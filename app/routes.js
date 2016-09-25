@@ -43,13 +43,24 @@ module.exports = function(app){
                     data2 = JSON.parse(data2);
 
                     //This will be in milliseconds
+
+                    console.log(data1);
+                    console.log(data2);
                     
                     var begin = new Date(data1.flightStatusResponse.statusResponse.flightStatusTO.flightStatusLegTOList.arrivalLocalTimeEstimatedActual);
                     begin = begin.getTime();
 
-                    var end = new Date(data2.flightStatusResponse.statusResponse.flightStatusTO.flightStatusLegTOList.departureLocalTimeScheduled);
+                    var end;
+                    if(data2.flightStatusResponse.statusResponse.flightStatusTO.flightStatusLegTOList[0] != undefined){
+                        end = new Date(data2.flightStatusResponse.statusResponse.flightStatusTO.flightStatusLegTOList[0].departureLocalTimeScheduled);
+                    }else{
+                        end = new Date(data2.flightStatusResponse.statusResponse.flightStatusTO.flightStatusLegTOList.departureLocalTimeScheduled);
+                    }
+
                     end = end.getTime();
 
+                    console.log(begin);
+                    console.log(end);
 
                     var hours = end-begin;
                     hours = hours / 1000; //now seconds
