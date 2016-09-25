@@ -47,7 +47,7 @@ module.exports = function(app){
                     var begin = new Date(data1.flightStatusResponse.statusResponse.flightStatusTO.flightStatusLegTOList.arrivalLocalTimeEstimatedActual);
                     begin = begin.getTime();
 
-                    var end = new Date(data2.flightStatusResponse.statusResponse.flightStatusTO.flightStatusLegTOList[0].departureLocalTimeScheduled);
+                    var end = new Date(data2.flightStatusResponse.statusResponse.flightStatusTO.flightStatusLegTOList.departureLocalTimeScheduled);
                     end = end.getTime();
 
 
@@ -69,6 +69,9 @@ function doStuff(req, res, hours, isDelta){
 
             var limit;
             var mode;
+
+            console.log(hours);
+
             if(isDelta){
                 limit = hours * 9000;
                 mode="driving";
@@ -99,11 +102,13 @@ function doStuff(req, res, hours, isDelta){
                 var randomArray = [];
 
                 var upperLimit;
-                if(potentialMarkers.length < 55 ){
+                if(potentialMarkers.length < 40 ){
                     upperLimit = potentialMarkers.length;
                 }else{
-                    upperLimit = 55;
+                    upperLimit = 40;
                 }
+
+                console.log(upperLimit);
                 for(var i = 0; i < upperLimit; i++){
                     var num = Math.floor(Math.random() * potentialMarkers.length);
                     randomArray.push(potentialMarkers[num]);
@@ -111,15 +116,23 @@ function doStuff(req, res, hours, isDelta){
                 }
                     
                 var start = (new Date).getTime();
-                var current = getGood(randomArray, [], [], (limit));
+                console.log('start');
+                var current = getGood(randomArray, [], [], limit);
                 var end = (new Date).getTime();
 
                 console.log("seconds: " + (end-start)/1000);
 
                 console.log('/////////////////////////////////////////////////');
                 
-                var srcString = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyApi4m2QEuUCKIiMtuUrmqicZwRrhza6gg&origin=" + Glat + "," + Glog + "&destination=" + current[current.length-1].LATITUDE + "," + current[current.length-1].LONGITUDE + "&mode=" + mode + "&waypoints=";
+                var srcString;
+                if(current.length > 1){
+                    srcString = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyApi4m2QEuUCKIiMtuUrmqicZwRrhza6gg&origin=" + Glat + "," + Glog + "&destination=" + current[current.length-1].LATITUDE + "," + current[current.length-1].LONGITUDE + "&mode=" + mode + "&waypoints=";
+                }else{
+                    srcString = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyApi4m2QEuUCKIiMtuUrmqicZwRrhza6gg&origin=" + Glat + "," + Glog + "&destination=" + Glat + "," + Glog;
+                }
                 
+                
+                console.log(current);
                 for(var i = 0; i < current.length-1; i++){
                     //console.log(current[i].LATITUDE + ", " + current[i].LONGITUDE);
                     srcString = srcString + current[i].LATITUDE + "," + current[i].LONGITUDE;
@@ -180,7 +193,6 @@ function getGood(potentialMarkers, current, working, limit){
         //console.log('this ran : ' + potentialMarkers.length + " | " + i);
             
     }
-
     return current;
 }
 
