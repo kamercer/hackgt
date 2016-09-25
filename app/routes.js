@@ -98,7 +98,13 @@ function doStuff(req, res, hours, isDelta){
 
                 var randomArray = [];
 
-                for(var i = 0; i < 55; i++){
+                var upperLimit;
+                if(potentialMarkers.length < 55 ){
+                    upperLimit = potentialMarkers.length;
+                }else{
+                    upperLimit = 55;
+                }
+                for(var i = 0; i < upperLimit; i++){
                     var num = Math.floor(Math.random() * potentialMarkers.length);
                     randomArray.push(potentialMarkers[num]);
                     potentialMarkers.splice(num, 1);
